@@ -1,4 +1,8 @@
 import numpy as np
+import os
+
+LOGS_DIR = os.path.join(os.path.dirname(__file__), "..", "data", "logs")
+TRAINED_AGENTS_DIR = os.path.join(os.path.abspath(__file__), "..", "data", "trained_agents")
 
 
 def load_q_table(path):

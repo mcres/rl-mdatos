@@ -1,15 +1,18 @@
 import sys
 import logging
+import gym
 
 sys.path.append("../..")
 
 from algos.sarsa import Sarsa
 
-EPISODES_TO_TRAIN = 1000
-TERMINAL_STATES = ()
-EPSILON = 1.0
-LEARNING_RATE = 0.1
 DISCOUNT_RATE = 0.99
+EPISODES_TO_TRAIN = 1000
+EPSILON = 1.0
+EPSILON_RATE = 0.99999
+LEARNING_RATE = 0.1
+TERMINAL_STATES = ()
+
 EPISODES_TO_RUN = 10
 
 
@@ -17,13 +20,14 @@ if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO)
 
     hyperparameters = {
-        "episodes": EPISODES_TO_TRAIN,
-        "terminal_states": TERMINAL_STATES,
-        "epsilon": EPSILON,
-        "learning_rate": LEARNING_RATE,
         "discount_rate": DISCOUNT_RATE,
+        "episodes": EPISODES_TO_TRAIN,
+        "epsilon": EPSILON,
+        "epsilon_rate": EPSILON_RATE,
+        "learning_rate": LEARNING_RATE,
+        "terminal_states": TERMINAL_STATES,
     }
-    sarsa = Sarsa("NChain-v0", hyperparameters)
+    sarsa = Sarsa(gym.make("NChain-v0", slip=0), hyperparameters)
 
     if sys.argv[1] == "train":
         sarsa.train()
