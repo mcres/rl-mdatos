@@ -12,6 +12,7 @@ from algos.utils import (
     load_q_table,
     LOGS_DIR,
     TRAINED_AGENTS_DIR,
+    save_q_table,
 )
 from tensorboardX import SummaryWriter
 
@@ -38,16 +39,13 @@ class Sarsa:
         self.writer = SummaryWriter(os.path.join(LOGS_DIR, self.env.spec.id), filename_suffix="Sarsa")
 
     def train(self):
-        """
-        :param episodes: (int)
-        """
         logging.info("Training Sarsa agent...")
-        episode_reward = []
         self.q_table = create_q_table(self.env.observation_space.n, self.env.action_space.n, self.terminal_states)
         for ep in range(self.episodes):
             state = self.env.reset()
             action = epsilon_greedy_q_table(self.q_table, state, self.epsilon, self.env.action_space)
             self.epsilon *= self.epsilon_rate
+            episode_reward = []
             done = False
             while not done:
                 new_state, reward, done, _ = self.env.step(action)
@@ -58,7 +56,7 @@ class Sarsa:
                 state = new_state
                 action = next_action
             self.writer.add_scalar("mean_episode_reward", np.mean(episode_reward), ep)
-            episode_reward = []
+        save_q_table(self.q_table, self.env.spec.id, "sarsa")
 
     def update_q_table(
         self,
@@ -69,6 +67,14 @@ class Sarsa:
         reward,
         done,
     ):
+        """
+        :param previous_state: (int)
+        :param current_state: (int)
+        :param previous_action: (int)
+        :param current_action: (int)
+        :param reward: (float)
+        :param done: (bool)
+        """
         previous_state_action_value = self.q_table[previous_state][previous_action]
         if done:
             current_state_action_value = 0.0
@@ -80,14 +86,24 @@ class Sarsa:
         self.q_table[previous_state][previous_action] = previous_state_action_value
 
     def run_agent(self, episodes):
+        """
+        :param episodes: (int)
+        """
         logging.info(f"Running Sarsa agent...")
-        self.q_table = load_q_table("path")
-        for episode in range(episodes):
-            logging.info(f"\n Episode {episode}")
+        self.q_table = load_q_table(self.env.spec.id, "sarsa")
+        for ep in range(episodes):
             state = self.env.reset()
+            episode_reward = []
             done = False
             while not done:
-                self.env.render()
+                try:
+                    self.env.render()
+                except NotImplementedError:
+                    pass
                 action = deterministic_q_table(self.q_table, state)
-                new_state, _, done, _ = self.env.step(action)
+                new_state, reward, done, _ = self.env.step(action)
+                episode_reward.append(reward)
                 state = new_state
+            logging.info(f"Episode {ep + 1}")
+            logging.info(f"Total reward: {np.sum(episode_reward)}")
+            logging.info(f"Mean reward: {np.mean(episode_reward)} \n")

@@ -1,16 +1,40 @@
+import logging
 import numpy as np
 import os
+import pickle
 
 LOGS_DIR = os.path.join(os.path.dirname(__file__), "..", "data", "logs")
-TRAINED_AGENTS_DIR = os.path.join(os.path.abspath(__file__), "..", "data", "trained_agents")
+TRAINED_AGENTS_DIR = os.path.join(os.path.dirname(__file__), "..", "data", "trained_agents")
 
 
-def load_q_table(path):
+def save_q_table(q_table, env_name, algo_name):
     """
-    :param path: (str) path to file where the Q-Table is stored
+    :param q_table: (numpy.array)
+    :param env_name: (str) name of the environment on which the Q-Table was trained on
+    :param algo_name: (str) name of the algorithm that trained the Q-Table
     """
-    pass
+    logging.info(f"Saving Q-Table: \n {q_table}")
+    assert(type(q_table == np.ndarray))
+    save_dir = os.path.join(TRAINED_AGENTS_DIR, env_name)
+    os.makedirs(save_dir, exist_ok=True)
+    save_file = os.path.join(save_dir, algo_name)
+    with open(save_file, 'wb') as file:
+        pickle.dump(q_table, file)
 
+def load_q_table(env_name, algo_name):
+    """
+    :param env_name: (str) name of the environment on which the Q-Table was trained on
+    :param algo_name: (str) name of the algorithm that trained the Q-Table
+    :return q_table: (numpy.array)
+    """
+    load_dir = os.path.join(TRAINED_AGENTS_DIR, env_name)
+    load_file = os.path.join(load_dir, algo_name)
+    with open(load_file, 'rb') as file:
+        q_table = pickle.load(file)
+    assert(type(q_table == np.ndarray))
+    logging.info(f"Loading Q-Table: \n {q_table}")
+
+    return q_table
 
 def create_q_table(observation_space, action_space, terminal_states=()):
     """

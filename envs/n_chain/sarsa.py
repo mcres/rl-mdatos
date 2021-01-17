@@ -31,5 +31,5 @@ if __name__ == "__main__":
 
     if sys.argv[1] == "train":
         sarsa.train()
-    elif sys.argv[1] == "run":
+    elif sys.argv[1] == "enjoy":
         sarsa.run_agent(EPISODES_TO_RUN)
