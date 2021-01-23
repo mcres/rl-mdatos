@@ -39,9 +39,9 @@ class Sarsa:
         os.makedirs(self.sarsa_log_dir, exist_ok=True)
         self.writer = SummaryWriter(os.path.join(LOGS_DIR, self.env.spec.id), filename_suffix="Sarsa")
 
-    def train(self):
+    def train(self, progress_bar):
         logging.info(f"Training Sarsa agent in {self.env.spec.id}")
-        logging.info(f"Logging training results in {self.sarsa_log_dir}")
+        logging.info(f"Logging training results in {os.path.normpath(self.sarsa_log_dir)}")
         self.q_table = create_q_table(self.env.observation_space.n, self.env.action_space.n, self.terminal_states)
         for ep in range(self.episodes):
             state = self.env.reset()
@@ -59,6 +59,7 @@ class Sarsa:
                 action = next_action
             self.writer.add_scalar("mean_episode_reward", np.mean(episode_reward), ep)
             self.writer.add_scalar("total_episode_reward", np.sum(episode_reward), ep)
+            progress_bar.update(ep)
         save_q_table(self.q_table, self.env.spec.id, "sarsa")
 
     def update_q_table(

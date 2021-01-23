@@ -4,6 +4,7 @@ import logging
 import gym
 
 from mdatos.algos.sarsa import Sarsa
+from mdatos.algos.utils import TrainingProgressBarManager
 
 DISCOUNT_RATE = 0.97
 EPISODES_TO_TRAIN = 100000
@@ -25,7 +26,7 @@ if __name__ == "__main__":
 
     hyperparameters = {
         "discount_rate": DISCOUNT_RATE,
-        "episodes": EPISODES_TO_TRAIN,  
+        "episodes": EPISODES_TO_TRAIN,
         "epsilon": EPSILON,
         "epsilon_rate": EPSILON_RATE,
         "learning_rate": LEARNING_RATE,
@@ -34,6 +35,7 @@ if __name__ == "__main__":
     sarsa = Sarsa(gym.make("FrozenLake-v0", is_slippery=False), hyperparameters)
 
     if args.train:
-        sarsa.train()
+        with TrainingProgressBarManager(EPISODES_TO_TRAIN) as tpb:
+            sarsa.train(tpb)
     elif args.run:
         sarsa.run_agent(EPISODES_TO_RUN)

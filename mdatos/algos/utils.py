@@ -4,6 +4,8 @@ import pickle
 
 import numpy as np
 
+from tqdm.auto import tqdm
+
 LOGS_DIR = os.path.join(os.path.dirname(__file__), "..", "data", "logs")
 TRAINED_AGENTS_DIR = os.path.join(os.path.dirname(__file__), "..", "data", "trained_agents")
 
@@ -80,3 +82,23 @@ def deterministic_q_table(q_table, state):
     """
     state_action_values = q_table[state]
     return np.argmax(state_action_values)
+
+
+class TrainingProgressBarManager():
+    def __init__(self, total_episodes):
+        self.pbar = None
+        self.total_episodes = total_episodes
+
+    def __enter__(self):
+        #TODO: remove unexpected bar created by tqdm constructor
+        self.pbar = tqdm(total=self.total_episodes) 
+        return self
+
+    def update(self, episode_no):
+        self.pbar.n = episode_no
+        self.pbar.update(0)
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        self.pbar.n = self.total_episodes
+        self.pbar.update(0)
+        self.pbar.close()
