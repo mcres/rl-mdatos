@@ -1,3 +1,4 @@
+import argparse
 import logging
 
 import gym
@@ -15,6 +16,10 @@ EPISODES_TO_RUN = 2
 
 
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--train", "-t", help="Train the agent and save it", action="store_true")
+    parser.add_argument("--run", "-r", help="Run a pretrained agent", action="store_true")
+
     logging.basicConfig(level=logging.INFO)
 
     hyperparameters = {
@@ -27,7 +32,7 @@ if __name__ == "__main__":
     }
     sarsa = Sarsa(gym.make("NChain-v0", slip=0), hyperparameters)
 
-    if sys.argv[1] == "train":
+    if args.train:
         sarsa.train()
-    elif sys.argv[1] == "enjoy":
+    elif args.run:
         sarsa.run_agent(EPISODES_TO_RUN)
