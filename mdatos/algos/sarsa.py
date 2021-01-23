@@ -6,7 +6,7 @@ import gym
 import numpy as np
 from tensorboardX import SummaryWriter
 
-from algos.utils import (
+from mdatos.algos.utils import (
     LOGS_DIR,
     TRAINED_AGENTS_DIR,
     create_q_table,

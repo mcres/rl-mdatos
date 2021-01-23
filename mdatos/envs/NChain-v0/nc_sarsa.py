@@ -1,18 +1,15 @@
 import logging
-import sys
 
 import gym
 
-sys.path.append("../..")
+from mdatos.algos.sarsa import Sarsa
 
-from algos.sarsa import Sarsa
-
-DISCOUNT_RATE = 0.97
-EPISODES_TO_TRAIN = 100000
+DISCOUNT_RATE = 0.99
+EPISODES_TO_TRAIN = 1000
 EPSILON = 1.0
-EPSILON_RATE = 0.999
+EPSILON_RATE = 0.99999
 LEARNING_RATE = 0.1
-TERMINAL_STATES = (5, 7, 11, 12, 15)
+TERMINAL_STATES = ()
 
 EPISODES_TO_RUN = 2
 
@@ -28,7 +25,7 @@ if __name__ == "__main__":
         "learning_rate": LEARNING_RATE,
         "terminal_states": TERMINAL_STATES,
     }
-    sarsa = Sarsa(gym.make("FrozenLake-v0", is_slippery=False), hyperparameters)
+    sarsa = Sarsa(gym.make("NChain-v0", slip=0), hyperparameters)
 
     if sys.argv[1] == "train":
         sarsa.train()

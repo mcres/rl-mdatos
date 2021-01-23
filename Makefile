@@ -1,5 +1,5 @@
 SHELL=/bin/bash
-LINT_PATHS=algos/ data/ envs/ 
+LINT_PATHS=mdatos/algos/ mdatos/data/ mdatos/envs/ 
 
 
 type:
