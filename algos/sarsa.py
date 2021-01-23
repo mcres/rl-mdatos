@@ -1,20 +1,20 @@
 import logging
+import os
 import time
 
 import gym
 import numpy as np
-import os
+from tensorboardX import SummaryWriter
 
 from algos.utils import (
+    LOGS_DIR,
+    TRAINED_AGENTS_DIR,
     create_q_table,
     deterministic_q_table,
     epsilon_greedy_q_table,
     load_q_table,
-    LOGS_DIR,
-    TRAINED_AGENTS_DIR,
     save_q_table,
 )
-from tensorboardX import SummaryWriter
 
 
 class Sarsa:
@@ -24,7 +24,7 @@ class Sarsa:
     """
 
     def __init__(self, env, params):
-        logging.info("Creating Sarsa object...")
+        logging.info("Creating Sarsa object")
 
         self.env = env
 
@@ -35,11 +35,13 @@ class Sarsa:
         self.learning_rate = params["learning_rate"]
         self.terminal_states = params["terminal_states"]
 
-        os.makedirs(os.path.join(LOGS_DIR, self.env.spec.id), exist_ok=True)
+        self.sarsa_log_dir = os.path.join(LOGS_DIR, self.env.spec.id)
+        os.makedirs(self.sarsa_log_dir, exist_ok=True)
         self.writer = SummaryWriter(os.path.join(LOGS_DIR, self.env.spec.id), filename_suffix="Sarsa")
 
     def train(self):
-        logging.info("Training Sarsa agent...")
+        logging.info(f"Training Sarsa agent in {self.env.spec.id}")
+        logging.info(f"Logging training results in {self.sarsa_log_dir}")
         self.q_table = create_q_table(self.env.observation_space.n, self.env.action_space.n, self.terminal_states)
         for ep in range(self.episodes):
             state = self.env.reset()
@@ -56,6 +58,7 @@ class Sarsa:
                 state = new_state
                 action = next_action
             self.writer.add_scalar("mean_episode_reward", np.mean(episode_reward), ep)
+            self.writer.add_scalar("total_episode_reward", np.sum(episode_reward), ep)
         save_q_table(self.q_table, self.env.spec.id, "sarsa")
 
     def update_q_table(

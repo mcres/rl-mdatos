@@ -1,5 +1,6 @@
-import sys
 import logging
+import sys
+
 import gym
 
 sys.path.append("../..")
@@ -13,7 +14,7 @@ EPSILON_RATE = 0.99999
 LEARNING_RATE = 0.1
 TERMINAL_STATES = ()
 
-EPISODES_TO_RUN = 10
+EPISODES_TO_RUN = 2
 
 
 if __name__ == "__main__":
