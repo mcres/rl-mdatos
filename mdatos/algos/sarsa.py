@@ -25,12 +25,18 @@ class Sarsa:
     """
     :param env: (string) environment registered in gym
     :param params: (dict) hyperparameters specific for a given environment
+    :param discrete: (bool) whether to discretize the state or not
     """
 
-    def __init__(self, env, params):
+    def __init__(self, env, params, discrete=False):
         logging.info("Creating Sarsa object")
 
         self.env = env
+        self.discrete = discrete
+        if discrete:
+            self.buckets = params["buckets"]
+            self.lower_bounds = params["lower_bounds"]
+            self.upper_bounds = params["upper_bounds"]
 
         self.discount_rate = params["discount_rate"]
         self.episodes = params["episodes"]
@@ -48,15 +54,15 @@ class Sarsa:
     def train(self, progress_bar):
         logging.info(f"Training Sarsa agent in {self.env.spec.id}")
         logging.info(f"Logging training results in {os.path.normpath(self.sarsa_log_dir)}")
-        self.q_table = create_q_table(self.env.observation_space.n, self.env.action_space.n, self.terminal_states)
+        self.create_q_table()
         for ep in range(self.episodes):
-            state = self.env.reset()
+            state = self.reset()
             action = epsilon_greedy_q_table(self.q_table, state, self.epsilon, self.env.action_space)
             self.epsilon *= self.epsilon_rate
             episode_reward = []
             done = False
             while not done:
-                new_state, reward, done, _ = self.env.step(action)
+                new_state, reward, done, _ = self.make_step(action)
                 episode_reward.append(reward)
                 next_action = epsilon_greedy_q_table(self.q_table, new_state, self.epsilon, self.env.action_space)
                 self.epsilon *= self.epsilon_rate
@@ -67,6 +73,50 @@ class Sarsa:
             self.writer.add_scalar("total_episode_reward", np.sum(episode_reward), ep)
             progress_bar.update(ep)
         save_q_table(self.q_table, self.env.spec.id, "sarsa")
+
+    def create_q_table(self):
+        if self.discrete:
+            self.q_table = create_discrete_q_table(self.buckets, self.env.action_space.n)
+        else:
+            self.q_table = create_q_table(self.env.observation_space.n, self.env.action_space.n, self.terminal_states)
+
+    def run_agent(self, episodes):
+        """
+        :param episodes: (int)
+        """
+        logging.info(f"Running Sarsa agent...")
+        self.q_table = load_q_table(self.env.spec.id, "sarsa")
+        for ep in range(episodes):
+            state = self.reset()
+            episode_reward = []
+            done = False
+            while not done:
+                try:
+                    self.env.render()
+                    time.sleep(1.0 / FPS)
+                except NotImplementedError:
+                    pass
+                action = deterministic_q_table(self.q_table, state)
+                new_state, reward, done, _ = self.make_step(action)
+                episode_reward.append(reward)
+                state = new_state
+            logging.info(f"Episode {ep + 1}")
+            logging.info(f"Total reward: {np.sum(episode_reward)}")
+            logging.info(f"Mean reward: {np.mean(episode_reward)} \n")
+
+    def reset(self):
+        state = self.env.reset()
+        if self.discrete:
+            state = discretize_state(state, self.buckets, self.lower_bounds, self.upper_bounds)
+
+        return state
+
+    def make_step(self, action):
+        new_state, reward, done, _ = self.env.step(action)
+        if self.discrete:
+            new_state = discretize_state(new_state, self.buckets, self.lower_bounds, self.upper_bounds)
+
+        return new_state, reward, done, _
 
     def update_q_table(
         self,
@@ -99,94 +149,3 @@ class Sarsa:
 
         previous_state_action_value += self.learning_rate * td_error
         self.q_table[index_previous] = previous_state_action_value
-
-    def run_agent(self, episodes):
-        """
-        :param episodes: (int)
-        """
-        logging.info(f"Running Sarsa agent...")
-        self.q_table = load_q_table(self.env.spec.id, "sarsa")
-        for ep in range(episodes):
-            state = self.env.reset()
-            episode_reward = []
-            done = False
-            while not done:
-                try:
-                    self.env.render()
-                    time.sleep(1.0 / FPS)
-                except NotImplementedError:
-                    pass
-                action = deterministic_q_table(self.q_table, state)
-                new_state, reward, done, _ = self.env.step(action)
-                episode_reward.append(reward)
-                state = new_state
-            logging.info(f"Episode {ep + 1}")
-            logging.info(f"Total reward: {np.sum(episode_reward)}")
-            logging.info(f"Mean reward: {np.mean(episode_reward)} \n")
-
-
-class DiscreteSarsa(Sarsa):
-    """
-    Sarsa for environments with continuous observation spaces
-
-    :param env: (string) environment registered in gym
-    :param params: (dict) hyperparameters specific for a given environment
-    """
-
-    def __init__(self, env, params):
-        super(DiscreteSarsa, self).__init__(env, params)
-        self.buckets = params["buckets"]
-        self.lower_bounds = params["lower_bounds"]
-        self.upper_bounds = params["upper_bounds"]
-
-    def train(self, progress_bar):
-        logging.info(f"Training discrete Sarsa agent in {self.env.spec.id}")
-        logging.info(f"Logging training results in {os.path.normpath(self.sarsa_log_dir)}")
-        self.q_table = create_discrete_q_table(self.buckets, self.env.action_space.n)
-        logging.info(f"Created Q table: {self.q_table}")
-        for ep in range(self.episodes):
-            state = self.env.reset()
-            state = discretize_state(state, self.buckets, self.lower_bounds, self.upper_bounds)
-            action = epsilon_greedy_q_table(self.q_table, state, self.epsilon, self.env.action_space)
-            self.epsilon *= self.epsilon_rate
-            episode_reward = []
-            done = False
-            while not done:
-                new_state, reward, done, _ = self.env.step(action)
-                new_state = discretize_state(new_state, self.buckets, self.lower_bounds, self.upper_bounds)
-                episode_reward.append(reward)
-                next_action = epsilon_greedy_q_table(self.q_table, new_state, self.epsilon, self.env.action_space)
-                self.epsilon *= self.epsilon_rate
-                self.update_q_table(state, new_state, action, next_action, reward, done)
-                state = new_state
-                action = next_action
-            self.writer.add_scalar("mean_episode_reward", np.mean(episode_reward), ep)
-            self.writer.add_scalar("total_episode_reward", np.sum(episode_reward), ep)
-            progress_bar.update(ep)
-        save_q_table(self.q_table, self.env.spec.id, "sarsa")
-
-    def run_agent(self, episodes):
-        """
-        :param episodes: (int)
-        """
-        logging.info(f"Running Sarsa agent...")
-        self.q_table = load_q_table(self.env.spec.id, "sarsa")
-        for ep in range(episodes):
-            state = self.env.reset()
-            state = discretize_state(state, self.buckets, self.lower_bounds, self.upper_bounds)
-            episode_reward = []
-            done = False
-            while not done:
-                try:
-                    self.env.render()
-                    time.sleep(1.0 / FPS)
-                except NotImplementedError:
-                    pass
-                action = deterministic_q_table(self.q_table, state)
-                new_state, reward, done, _ = self.env.step(action)
-                new_state = discretize_state(new_state, self.buckets, self.lower_bounds, self.upper_bounds)
-                episode_reward.append(reward)
-                state = new_state
-            logging.info(f"Episode {ep + 1}")
-            logging.info(f"Total reward: {np.sum(episode_reward)}")
-            logging.info(f"Mean reward: {np.mean(episode_reward)} \n")

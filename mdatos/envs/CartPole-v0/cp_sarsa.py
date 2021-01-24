@@ -4,7 +4,7 @@ import math
 
 import gym
 
-from mdatos.algos.sarsa import DiscreteSarsa
+from mdatos.algos.sarsa import Sarsa
 from mdatos.algos.utils import TrainingProgressBarManager
 
 DISCOUNT_RATE = 1.0
@@ -40,7 +40,7 @@ if __name__ == "__main__":
         "lower_bounds": LOWER_BOUNDS,
         "upper_bounds": UPPER_BOUNDS,
     }
-    sarsa = DiscreteSarsa(gym.make("CartPole-v0"), hyperparameters)
+    sarsa = Sarsa(gym.make("CartPole-v0"), hyperparameters, discrete=True)
 
     if args.train:
         with TrainingProgressBarManager(EPISODES_TO_TRAIN) as tpb:

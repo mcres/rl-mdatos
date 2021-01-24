@@ -10,19 +10,28 @@ LOGS_DIR = os.path.join(os.path.dirname(__file__), "..", "data", "logs")
 TRAINED_AGENTS_DIR = os.path.join(os.path.dirname(__file__), "..", "data", "trained_agents")
 
 
-def save_q_table(q_table, env_name, algo_name):
+def create_q_table(observation_space, action_space, terminal_states=()):
     """
-    :param q_table: (numpy.array)
-    :param env_name: (str) name of the environment on which the Q-Table was trained on
-    :param algo_name: (str) name of the algorithm that trained the Q-Table
+    :param observation_space: (int)
+    :param action_space: (int)
+    :param terminal_states: (tuple)
     """
-    logging.info(f"Saving Q-Table: \n {q_table}")
-    assert type(q_table == np.ndarray)
-    save_dir = os.path.join(TRAINED_AGENTS_DIR, env_name)
-    os.makedirs(save_dir, exist_ok=True)
-    save_file = os.path.join(save_dir, algo_name)
-    with open(save_file, "wb") as file:
-        pickle.dump(q_table, file)
+    q_table = np.random.randn(observation_space, action_space)
+
+    # state-action pairs of terminal states must be zero
+    if terminal_states:
+        for ts in terminal_states:
+            q_table[ts] = 0.0
+
+    return q_table
+
+
+def create_discrete_q_table(buckets, action_space_length):
+    """
+    :param buckets: (tuple) number of possible values for each environment observation
+    :param action_space_length: (int)
+    """
+    return np.zeros(buckets + (action_space_length,))
 
 
 def load_q_table(env_name, algo_name):
@@ -41,20 +50,19 @@ def load_q_table(env_name, algo_name):
     return q_table
 
 
-def create_q_table(observation_space, action_space, terminal_states=()):
+def save_q_table(q_table, env_name, algo_name):
     """
-    :param observation_space: (int)
-    :param action_space: (int)
-    :param terminal_states: (tuple)
+    :param q_table: (numpy.array)
+    :param env_name: (str) name of the environment on which the Q-Table was trained on
+    :param algo_name: (str) name of the algorithm that trained the Q-Table
     """
-    q_table = np.random.randn(observation_space, action_space)
-
-    # state-action pairs of terminal states must be zero
-    if terminal_states:
-        for ts in terminal_states:
-            q_table[ts] = 0.0
-
-    return q_table
+    logging.info(f"Saving Q-Table: \n {q_table}")
+    assert type(q_table == np.ndarray)
+    save_dir = os.path.join(TRAINED_AGENTS_DIR, env_name)
+    os.makedirs(save_dir, exist_ok=True)
+    save_file = os.path.join(save_dir, algo_name)
+    with open(save_file, "wb") as file:
+        pickle.dump(q_table, file)
 
 
 def epsilon_greedy_q_table(q_table, state, epsilon, action_space):
@@ -82,14 +90,6 @@ def deterministic_q_table(q_table, state):
     """
     state_action_values = q_table[state]
     return np.argmax(state_action_values)
-
-
-def create_discrete_q_table(buckets, action_space_length):
-    """
-    :param buckets: (tuple) number of possible values for each environment observation
-    :param action_space_length: (int)
-    """
-    return np.zeros(buckets + (action_space_length,))
 
 
 def discretize_state(state, buckets, lower_bounds, upper_bounds):
