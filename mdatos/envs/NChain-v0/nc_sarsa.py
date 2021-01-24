@@ -1,10 +1,7 @@
-import argparse
-import logging
-
 import gym
 
 from mdatos.algos.sarsa import Sarsa
-from mdatos.algos.utils import TrainingProgressBarManager
+from mdatos.algos.utils import run_standard_parser, TrainingProgressBarManager
 
 DISCOUNT_RATE = 0.99
 EPISODES_TO_TRAIN = 1000
@@ -17,12 +14,7 @@ EPISODES_TO_RUN = 2
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--train", "-t", help="Train the agent and save it", action="store_true")
-    parser.add_argument("--run", "-r", help="Run a pretrained agent", action="store_true")
-    args = parser.parse_args()
-
-    logging.basicConfig(level=logging.INFO)
+    args = run_standard_parser()
 
     hyperparameters = {
         "discount_rate": DISCOUNT_RATE,

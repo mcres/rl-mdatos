@@ -29,7 +29,7 @@ class Sarsa:
     """
 
     def __init__(self, env, params, discrete=False):
-        logging.info("Creating Sarsa object")
+        logging.debug("Creating Sarsa object")
 
         self.env = env
         self.discrete = discrete

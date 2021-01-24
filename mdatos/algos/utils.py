@@ -1,3 +1,4 @@
+import argparse
 import logging
 import os
 import pickle
@@ -8,6 +9,28 @@ from tqdm.auto import tqdm
 FPS = 25
 LOGS_DIR = os.path.join(os.path.dirname(__file__), "..", "data", "logs")
 TRAINED_AGENTS_DIR = os.path.join(os.path.dirname(__file__), "..", "data", "trained_agents")
+
+
+def run_standard_parser():
+    """
+    Create standard parser for running the different algorithms
+
+    :return args:
+    """
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--train", "-t", help="train the agent and save it", action="store_true")
+    parser.add_argument("--run", "-r", help="run a pretrained agent", action="store_true")
+    parser.add_argument("--verbose", "-v", help="logging level: 0 for DEBUG, 1 for INFO", type=int)
+    args = parser.parse_args()
+
+    if args.verbose == 0:
+        logging.basicConfig(level=logging.DEBUG)
+    elif args.verbose == 1:
+        logging.basicConfig(level=logging.INFO)
+    else:
+        logging.basicConfig(level=logging.INFO)
+
+    return args
 
 
 def create_q_table(observation_space, action_space, terminal_states=()):
@@ -45,7 +68,7 @@ def load_q_table(env_name, algo_name):
     with open(load_file, "rb") as file:
         q_table = pickle.load(file)
     assert type(q_table == np.ndarray)
-    logging.info(f"Loading Q-Table: \n {q_table}")
+    logging.debug(f"Loading Q-Table: \n {q_table}")
 
     return q_table
 
@@ -56,7 +79,7 @@ def save_q_table(q_table, env_name, algo_name):
     :param env_name: (str) name of the environment on which the Q-Table was trained on
     :param algo_name: (str) name of the algorithm that trained the Q-Table
     """
-    logging.info(f"Saving Q-Table: \n {q_table}")
+    logging.debug(f"Saving Q-Table: \n {q_table}")
     assert type(q_table == np.ndarray)
     save_dir = os.path.join(TRAINED_AGENTS_DIR, env_name)
     os.makedirs(save_dir, exist_ok=True)
