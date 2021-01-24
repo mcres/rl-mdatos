@@ -3,7 +3,7 @@ import math
 import gym
 
 from mdatos.algos.sarsa import Sarsa
-from mdatos.algos.utils import run_standard_parser, TrainingProgressBarManager
+from mdatos.algos.utils import TrainingProgressBarManager, run_standard_parser
 
 DISCOUNT_RATE = 1.0
 EPISODES_TO_TRAIN = 10000
@@ -39,4 +39,4 @@ if __name__ == "__main__":
         with TrainingProgressBarManager(EPISODES_TO_TRAIN) as tpb:
             sarsa.train(tpb)
     elif args.run:
-        sarsa.run_agent(EPISODES_TO_RUN)
+        sarsa.run_agent(EPISODES_TO_RUN, record=args.record)

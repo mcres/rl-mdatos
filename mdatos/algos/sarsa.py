@@ -10,6 +10,7 @@ from mdatos.algos.utils import (
     FPS,
     LOGS_DIR,
     TRAINED_AGENTS_DIR,
+    VIDEOS_DIR,
     create_discrete_q_table,
     create_q_table,
     deterministic_q_table,
@@ -80,11 +81,19 @@ class Sarsa:
         else:
             self.q_table = create_q_table(self.env.observation_space.n, self.env.action_space.n, self.terminal_states)
 
-    def run_agent(self, episodes):
+    def run_agent(self, episodes, record=False):
         """
         :param episodes: (int)
+        :param record: (bool)
         """
-        logging.info(f"Running Sarsa agent...")
+        if record:
+            # TODO there's an issue and apparently videos are not recorded correctly
+            # https://github.com/openai/gym/issues/1925
+            logging.info(f"Recording video")
+            video_dir = os.path.join(VIDEOS_DIR, self.env.spec.id, "Sarsa")
+            self.env = gym.wrappers.Monitor(self.env, video_dir, video_callable=lambda episode_id: True, force=True)
+
+        logging.info(f"Running Sarsa agent")
         self.q_table = load_q_table(self.env.spec.id, "sarsa")
         for ep in range(episodes):
             state = self.reset()

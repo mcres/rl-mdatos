@@ -6,6 +6,7 @@ import pickle
 import numpy as np
 from tqdm.auto import tqdm
 
+VIDEOS_DIR = os.path.join(os.path.dirname(__file__), "..", "data", "videos")
 FPS = 25
 LOGS_DIR = os.path.join(os.path.dirname(__file__), "..", "data", "logs")
 TRAINED_AGENTS_DIR = os.path.join(os.path.dirname(__file__), "..", "data", "trained_agents")
@@ -19,6 +20,9 @@ def run_standard_parser():
     """
     parser = argparse.ArgumentParser()
     parser.add_argument("--train", "-t", help="train the agent and save it", action="store_true")
+    parser.add_argument(
+        "--record", "-R", help="record and save a video (only for CartPole and MountainCar", action="store_true"
+    )
     parser.add_argument("--run", "-r", help="run a pretrained agent", action="store_true")
     parser.add_argument("--verbose", "-v", help="logging level: 0 for DEBUG, 1 for INFO", type=int)
     args = parser.parse_args()
