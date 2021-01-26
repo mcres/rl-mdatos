@@ -79,8 +79,9 @@ class Sarsa:
         :param record: (bool)
         """
         if record:
-            # TODO there's an issue and apparently videos are not recorded correctly
+            # TODO there's an issue going on and currently videos are not recorded correctly
             # https://github.com/openai/gym/issues/1925
+            # As a workaround, videos can be recorded by installing gym from source (pip install -e gym)
             logging.info(f"Recording video")
             video_dir = os.path.join(VIDEOS_DIR, self.env.spec.id, "Sarsa")
             self.env = gym.wrappers.Monitor(self.env, video_dir, video_callable=lambda episode_id: True, force=True)
