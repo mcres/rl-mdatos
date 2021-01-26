@@ -4,7 +4,6 @@ import time
 
 import gym
 import numpy as np
-from tensorboardX import SummaryWriter
 
 from mdatos.algos.utils import (
     FPS,
@@ -16,6 +15,7 @@ from mdatos.algos.utils import (
     deterministic_q_table,
     discretize_state,
     epsilon_greedy_q_table,
+    get_tensorboard_writter,
     load_q_table,
     save_q_table,
     state_action_to_tuple,
@@ -48,13 +48,10 @@ class Sarsa:
         if "terminal_states" in params:
             self.terminal_states = params["terminal_states"]
 
-        self.sarsa_log_dir = os.path.join(LOGS_DIR, self.env.spec.id)
-        os.makedirs(self.sarsa_log_dir, exist_ok=True)
-        self.writer = SummaryWriter(os.path.join(LOGS_DIR, self.env.spec.id), filename_suffix="Sarsa")
-
     def train(self, progress_bar):
+        self.writer, log_dir = get_tensorboard_writter(self.env.spec.id, "Sarsa")
         logging.info(f"Training Sarsa agent in {self.env.spec.id}")
-        logging.info(f"Logging training results in {os.path.normpath(self.sarsa_log_dir)}")
+        logging.info(f"Logging training results in {os.path.normpath(log_dir)}")
         self.create_q_table()
         for ep in range(self.episodes):
             state = self.reset()

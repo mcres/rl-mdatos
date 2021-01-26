@@ -4,6 +4,7 @@ import os
 import pickle
 
 import numpy as np
+from tensorboardX import SummaryWriter
 from tqdm.auto import tqdm
 
 VIDEOS_DIR = os.path.join(os.path.dirname(__file__), "..", "data", "videos")
@@ -163,6 +164,39 @@ def state_action_to_tuple(state, action):
         state = list(state)
         state.append(action)
         return tuple(state)
+
+
+def get_dirs_no(path):
+    """
+    Get the number of directories in a given path. It does not include subdirectories.
+
+    :param path: (str)
+
+    :return: (int)
+    """
+    dir_entries = list(os.scandir(path))
+    dirs_list = [1 for dir_ent in dir_entries if dir_ent.is_dir()]
+
+    return len(dirs_list)
+
+
+def get_tensorboard_writter(env_name, algo_name):
+    """
+    :param env_name: (str)
+    :param algo_name: (str)
+
+    :return summary_writter: (tensorboardX.SummaryWriter)
+    :return experiment_dir:
+    """
+    log_dir = os.path.join(LOGS_DIR, env_name, algo_name)
+    os.makedirs(log_dir, exist_ok=True)
+
+    # create new dir to save the training
+    experiment_no = get_dirs_no(log_dir) + 1
+    experiment_dir = os.path.join(log_dir, f"Experiment_{experiment_no}")
+    summary_writter = SummaryWriter(experiment_dir)
+
+    return summary_writter, experiment_dir
 
 
 class TrainingProgressBarManager:

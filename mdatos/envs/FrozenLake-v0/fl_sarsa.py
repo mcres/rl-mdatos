@@ -4,7 +4,7 @@ from mdatos.algos.sarsa import Sarsa
 from mdatos.algos.utils import TrainingProgressBarManager, run_standard_parser
 
 DISCOUNT_RATE = 0.97
-EPISODES_TO_TRAIN = 100000
+EPISODES_TO_TRAIN = 2000
 EPSILON = 1.0
 EPSILON_RATE = 0.999
 LEARNING_RATE = 0.1
@@ -15,8 +15,6 @@ EPISODES_TO_RUN = 2
 
 if __name__ == "__main__":
     args = run_standard_parser()
-
-    logging.basicConfig(level=logging.INFO)
 
     hyperparameters = {
         "discount_rate": DISCOUNT_RATE,
