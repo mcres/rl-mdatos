@@ -5,20 +5,15 @@ import time
 import gym
 import numpy as np
 
-from mdatos.algos.utils import (
-    FPS,
-    LOGS_DIR,
-    TRAINED_AGENTS_DIR,
-    VIDEOS_DIR,
+from mdatos.utils.agent import discretize_state, get_tensorboard_writter, state_action_to_tuple
+from mdatos.utils.misc import FPS, LOGS_DIR, TRAINED_AGENTS_DIR, VIDEOS_DIR
+from mdatos.utils.q_table import (
     create_discrete_q_table,
     create_q_table,
     deterministic_q_table,
-    discretize_state,
     epsilon_greedy_q_table,
-    get_tensorboard_writter,
     load_q_table,
     save_q_table,
-    state_action_to_tuple,
 )
 
 
