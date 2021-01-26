@@ -4,10 +4,10 @@ import os
 
 from tqdm.auto import tqdm
 
-VIDEOS_DIR = os.path.join(os.path.dirname(__file__), "..", "data", "videos")
+VIDEOS_DIR = os.path.join(os.path.dirname(__file__), "..", "..", "data", "videos")
 FPS = 25
-LOGS_DIR = os.path.join(os.path.dirname(__file__), "..", "data", "logs")
-TRAINED_AGENTS_DIR = os.path.join(os.path.dirname(__file__), "..", "data", "trained_agents")
+LOGS_DIR = os.path.join(os.path.dirname(__file__), "..", "..", "data", "logs")
+TRAINED_AGENTS_DIR = os.path.join(os.path.dirname(__file__), "..", "..", "data", "trained_agents")
 
 
 def run_standard_parser():

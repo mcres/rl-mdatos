@@ -3,7 +3,7 @@ import os
 import numpy as np
 from tensorboardX import SummaryWriter
 
-from mdatos.utils.misc import VIDEOS_DIR
+from mdatos.utils.misc import LOGS_DIR, VIDEOS_DIR, get_dirs_no
 
 
 def discretize_state(state, buckets, lower_bounds, upper_bounds):
