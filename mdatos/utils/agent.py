@@ -16,7 +16,7 @@ def discretize_state(state, buckets, lower_bounds, upper_bounds):
     :param lower_bounds: (list) lower bounds for each environment observation
     :param upper_bounds: (list) upper bounds for each environment observation
 
-    :return discretized_state: (tuple)
+    :return discretized: (tuple)
     """
     discretized = list()
     for i in range(len(state)):

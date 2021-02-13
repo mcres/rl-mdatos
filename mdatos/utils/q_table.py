@@ -12,6 +12,7 @@ def create_q_table(observation_space, action_space, terminal_states=()):
     :param observation_space: (int)
     :param action_space: (int)
     :param terminal_states: (tuple)
+    :return: (np.array)
     """
     q_table = np.random.randn(observation_space, action_space)
 
@@ -19,6 +20,8 @@ def create_q_table(observation_space, action_space, terminal_states=()):
     if terminal_states:
         for ts in terminal_states:
             q_table[ts] = 0.0
+
+    logging.debug(f"Creating Q-Table: \n {q_table}")
 
     return q_table
 
