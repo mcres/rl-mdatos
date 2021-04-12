@@ -73,6 +73,31 @@ $ (.venv) python cp_q_learning.py --run --record
 - `trained_agents`: files with final parameters of the trained agents, which are loaded at execution time.
 - `videos`: videos of the recorded episodes.
 
+## Output
+
+After successfully training the agents, these should be the results.
+
+### NChain-v0
+
+```
+INFO:root:Running Q-Learning agent
+INFO:root:Episode 1
+INFO:root:Total reward: 9960
+INFO:root:Mean reward: 9.96
+```
+
+### FrozenLake-v0
+
+![frozen_lake](https://user-images.githubusercontent.com/14854080/114436720-f8cd5180-9bc5-11eb-8640-966c092bb759.png)
+
+### CartPole-v0
+
+![cartpole](https://user-images.githubusercontent.com/14854080/114436929-36ca7580-9bc6-11eb-829e-206ca43c889d.gif)
+
+### MountainCar-v0
+
+![mountain_car](https://user-images.githubusercontent.com/14854080/114436940-39c56600-9bc6-11eb-90db-5382cc8de0d6.gif)
+
 
 ## Bibliography
 
