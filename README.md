@@ -22,7 +22,7 @@ A Jupyter Notebook written in Spanish that provides basic explanations of RL con
 
 The [bibliography](https://github.com/mcres/rl-mdatos#bibliography) I used is probably the most common entry point if you want to learn Reinforcement Learning.
 
-### How to use this repo
+## How to use this repo
 
 In order to train and evaluate the agents in this repo, follow these steps:
 
