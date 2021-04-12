@@ -1,7 +1,6 @@
 import gym
-
-from mdatos.algos.sarsa import Sarsa
-from mdatos.utils.misc import TrainingProgressBarManager, run_standard_parser
+from rl_mdatos.algos.sarsa import Sarsa
+from rl_mdatos.utils.misc import TrainingProgressBarManager, run_standard_parser
 
 DISCOUNT_RATE = 0.97
 EPISODES_TO_TRAIN = 2000

@@ -1,14 +1,13 @@
 import gym
+from rl_mdatos.algos.sarsa import Sarsa
+from rl_mdatos.utils.misc import TrainingProgressBarManager, run_standard_parser
 
-from mdatos.algos.q_learning import QLearning
-from mdatos.utils.misc import TrainingProgressBarManager, run_standard_parser
-
-DISCOUNT_RATE = 0.97
-EPISODES_TO_TRAIN = 2000
+DISCOUNT_RATE = 0.99
+EPISODES_TO_TRAIN = 1000
 EPSILON = 1.0
-EPSILON_RATE = 0.999
-LEARNING_RATE = 0.8
-TERMINAL_STATES = (5, 7, 11, 12, 15)
+EPSILON_RATE = 0.99999
+LEARNING_RATE = 0.1
+TERMINAL_STATES = ()
 
 EPISODES_TO_RUN = 2
 
@@ -24,10 +23,10 @@ if __name__ == "__main__":
         "learning_rate": LEARNING_RATE,
         "terminal_states": TERMINAL_STATES,
     }
-    q_learning = QLearning(gym.make("FrozenLake-v0", is_slippery=False), hyperparameters)
+    sarsa = Sarsa(gym.make("NChain-v0", slip=0), hyperparameters)
 
     if args.train:
         with TrainingProgressBarManager(EPISODES_TO_TRAIN) as tpb:
-            q_learning.train(tpb)
+            sarsa.train(tpb)
     elif args.run:
-        q_learning.run_agent(EPISODES_TO_RUN)
+        sarsa.run_agent(EPISODES_TO_RUN)

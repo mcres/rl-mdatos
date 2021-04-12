@@ -1,15 +1,14 @@
 import gym
-
-from mdatos.algos.n_step_sarsa import NStepSarsa
-from mdatos.utils.misc import TrainingProgressBarManager, run_standard_parser
+from rl_mdatos.algos.n_step_sarsa import NStepSarsa
+from rl_mdatos.utils.misc import TrainingProgressBarManager, run_standard_parser
 
 DISCOUNT_RATE = 0.97
-EPISODES_TO_TRAIN = 30000
+EPISODES_TO_TRAIN = 1000
 EPSILON = 1.0
-EPSILON_RATE = 0.999
-LEARNING_RATE = 0.08
+EPSILON_RATE = 0.99
+LEARNING_RATE = 0.05
 N_STEPS = 3
-TERMINAL_STATES = (5, 7, 11, 12, 15)
+TERMINAL_STATES = ()
 
 EPISODES_TO_RUN = 2
 
@@ -26,7 +25,7 @@ if __name__ == "__main__":
         "learning_rate": LEARNING_RATE,
         "terminal_states": TERMINAL_STATES,
     }
-    n_step_sarsa = NStepSarsa(gym.make("FrozenLake-v0", is_slippery=False), hyperparameters)
+    n_step_sarsa = NStepSarsa(gym.make("NChain-v0", slip=0), hyperparameters)
 
     if args.train:
         with TrainingProgressBarManager(EPISODES_TO_TRAIN) as tpb:

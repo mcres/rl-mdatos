@@ -4,16 +4,9 @@ import time
 
 import gym
 import numpy as np
-
-from mdatos.utils.agent import discretize_state, get_tensorboard_writter, state_action_to_tuple
-from mdatos.utils.misc import FPS, LOGS_DIR, TRAINED_AGENTS_DIR, VIDEOS_DIR
-from mdatos.utils.q_table import (
-    create_q_table,
-    deterministic_q_table,
-    epsilon_greedy_q_table,
-    load_q_table,
-    save_q_table,
-)
+from rl_mdatos.utils.agent import discretize_state, get_tensorboard_writter, state_action_to_tuple
+from rl_mdatos.utils.misc import FPS, LOGS_DIR, TRAINED_AGENTS_DIR, VIDEOS_DIR
+from rl_mdatos.utils.q_table import create_q_table, deterministic_q_table, epsilon_greedy_q_table, load_q_table, save_q_table
 
 
 # TODO: add observation space discretization

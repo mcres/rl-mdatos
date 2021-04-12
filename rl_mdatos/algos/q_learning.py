@@ -4,10 +4,9 @@ import time
 
 import gym
 import numpy as np
-
-from mdatos.utils.agent import discretize_state, get_tensorboard_writter, state_action_to_tuple
-from mdatos.utils.misc import FPS, LOGS_DIR, TRAINED_AGENTS_DIR, VIDEOS_DIR
-from mdatos.utils.q_table import (
+from rl_mdatos.utils.agent import discretize_state, get_tensorboard_writter, state_action_to_tuple
+from rl_mdatos.utils.misc import FPS, LOGS_DIR, TRAINED_AGENTS_DIR, VIDEOS_DIR
+from rl_mdatos.utils.q_table import (
     create_discrete_q_table,
     create_q_table,
     deterministic_q_table,
@@ -57,7 +56,9 @@ class QLearning:
                 self.epsilon *= self.epsilon_rate
                 new_state, reward, done, _ = self.make_step(action)
                 episode_reward.append(reward)
-                best_next_action = epsilon_greedy_q_table(self.q_table, new_state, epsilon=0.0, action_space=self.env.action_space)
+                best_next_action = epsilon_greedy_q_table(
+                    self.q_table, new_state, epsilon=0.0, action_space=self.env.action_space
+                )
                 self.epsilon *= self.epsilon_rate
                 self.update_q_table(state, new_state, action, best_next_action, reward, done)
                 state = new_state

@@ -3,8 +3,7 @@ import os
 import pickle
 
 import numpy as np
-
-from mdatos.utils.misc import TRAINED_AGENTS_DIR
+from rl_mdatos.utils.misc import TRAINED_AGENTS_DIR
 
 
 def create_q_table(observation_space, action_space, terminal_states=()):

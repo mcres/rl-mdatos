@@ -1,7 +1,6 @@
 import gym
-
-from mdatos.algos.sarsa import Sarsa
-from mdatos.utils.misc import TrainingProgressBarManager, run_standard_parser
+from rl_mdatos.algos.q_learning import QLearning
+from rl_mdatos.utils.misc import TrainingProgressBarManager, run_standard_parser
 
 DISCOUNT_RATE = 0.99
 EPISODES_TO_TRAIN = 1000
@@ -24,10 +23,10 @@ if __name__ == "__main__":
         "learning_rate": LEARNING_RATE,
         "terminal_states": TERMINAL_STATES,
     }
-    sarsa = Sarsa(gym.make("NChain-v0", slip=0), hyperparameters)
+    q_learning = QLearning(gym.make("NChain-v0", slip=0), hyperparameters)
 
     if args.train:
         with TrainingProgressBarManager(EPISODES_TO_TRAIN) as tpb:
-            sarsa.train(tpb)
+            q_learning.train(tpb)
     elif args.run:
-        sarsa.run_agent(EPISODES_TO_RUN)
+        q_learning.run_agent(EPISODES_TO_RUN)
