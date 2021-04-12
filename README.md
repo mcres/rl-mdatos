@@ -20,7 +20,7 @@ The goal of this repo is purely educational:
 
 A Jupyter Notebook written in Spanish that provides basic explanations of RL concepts making use of this repo can be found [here](https://github.com/mcres/rl-mdatos/blob/master/notebook/notebook.ipynb).
 
-The [bibliography](##Bibliography) I used is probably the most common entry point if you want to learn Reinforcement Learning.
+The [bibliography](https://github.com/mcres/rl-mdatos#bibliography) I used is probably the most common entry point if you want to learn Reinforcement Learning.
 
 ### How to use this repo
 
@@ -90,15 +90,21 @@ INFO:root:Mean reward: 9.96
 
 ### FrozenLake-v0
 
-![frozen_lake](https://user-images.githubusercontent.com/14854080/114436720-f8cd5180-9bc5-11eb-8640-966c092bb759.png)
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/14854080/114436720-f8cd5180-9bc5-11eb-8640-966c092bb759.png">
+</p>
 
 ### CartPole-v0
 
-![cartpole](https://user-images.githubusercontent.com/14854080/114436929-36ca7580-9bc6-11eb-829e-206ca43c889d.gif)
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/14854080/114436929-36ca7580-9bc6-11eb-829e-206ca43c889d.gif">
+</p>
 
 ### MountainCar-v0
 
-![mountain_car](https://user-images.githubusercontent.com/14854080/114436940-39c56600-9bc6-11eb-90db-5382cc8de0d6.gif)
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/14854080/114436940-39c56600-9bc6-11eb-90db-5382cc8de0d6.gif">
+</p>
 
 
 ## Bibliography
