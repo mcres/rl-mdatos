@@ -1,6 +1,6 @@
 # rl-mdatos
 
-This repository contains my final project for the _Data Mining_ subject &mdash; _Minería de Datos_ in Spanish, that's why `mdatos`, taught in the _Master's Degree In Systems And Control Engineering_ at UNED (_Universidad Nacional de Educación a Distancia_) and UCM (_Universidad Complutense de Madrid_), from Spain.
+This repository contains my final project for the _Data Mining_ subject &mdash; _Minería de Datos_ in Spanish, that's why `mdatos`, taught in the _Master's Degree In Systems And Control Engineering_ at [UNED](https://www.uned.es/universidad/inicio.html) (_Universidad Nacional de Educación a Distancia_) and [UCM](https://www.ucm.es/) (_Universidad Complutense de Madrid_), from Spain.
 
 It is an implementation of several tabular Reinforcement Learning algorithms, which are then applied to [OpenAI Gym](https://github.com/openai/gym) environments.
 The algorithms and environments implemented are the following:
@@ -17,6 +17,8 @@ Environment | Sarsa | Q-Learning | n-step Sarsa | Dyna-Q
 The goal of this repo is purely educational:
 - For more elaborated and complicated RL algorithms, see [cleanrl](https://github.com/vwxyzjn/cleanrl).
 - For an intuitive, easy-to-use library widely used in research, see [stable-baselines3](https://github.com/DLR-RM/stable-baselines3) and [rl-baselines3-zoo](https://github.com/DLR-RM/rl-baselines3-zoo).
+
+A Jupyter Notebook written in Spanish that provides basic explanations of RL concepts making use of this repo can be found [here](https://github.com/mcres/rl-mdatos/blob/master/notebook/notebook.ipynb).
 
 The [bibliography](##Bibliography) I used is probably the most common entry point if you want to learn Reinforcement Learning.
 
