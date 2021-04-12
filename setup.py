@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 
-setup(name='mdatos',
+setup(name='rl_mdatos',
       version='1.0',
-      description='mdatos',
-      author='Martiño Crespo',
+      description='rl_mdatos',
+      author='Martiño Crespo Álvarez',
      )
